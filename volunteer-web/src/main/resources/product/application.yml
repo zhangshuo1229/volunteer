@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: product
+app.id: ft.project.web.product
+apollo.meta: http://192.168.3.123:8888

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hbsx.mappers.volunteer.VolunteerGroupDao">
+
+    <resultMap id="index" type="com.hbsx.entity.volunteer.HzVolunteerGroup">
+        <id property="id" column="id"/>
+        <result property="volunteerNum" column="volunteer_num"/>
+        <result property="groupNum" column="group_num"/>
+        <result property="volunteerTotalNum" column="volunteer_total_num"/>
+        <result property="groupTotalNum" column="group_total_num"/>
+        <result property="diTime" column="di_time"/>
+        <result property="tjDate" column="tj_date"/>
+        <result property="instCode" column="inst_code"/>
+        <result property="instName" column="inst_name"/>
+    </resultMap>
+
+
+    <delete id="deleteVolunteerGroupByTjDate">
+        delete from hz_volunteer_group where tj_date in
+        <foreach item="item" collection="dateList"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="processVolunteerGroup" resultType="com.hbsx.entity.volunteer.HzVolunteerGroup">
+        <if test="findType == 'group'">
+            SELECT v.*,(
+            SELECT count(1) FROM mx_volunteer_group WHERE 1=1
+            <if test="dateType == 'month'">
+                and DATE_FORMAT(establish_date,'%Y-%m') &lt;= v.tjDate
+            </if>
+            <if test="dateType == 'year'">
+                and DATE_FORMAT(establish_date,'%Y') &lt;= v.tjDate
+            </if>
+            and inst_code = instCode
+            ) groupTotalNum
+            FROM (
+            SELECT
+            inst_code instCode,
+            max(inst_name) instName,
+            <if test="dateType == 'month'">
+                DATE_FORMAT(establish_date, '%Y-%m') tjDate,
+                '3' diTime,
+            </if>
+            <if test="dateType == 'year'">
+                DATE_FORMAT(establish_date, '%Y') tjDate,
+                '5' diTime,
+            </if>
+            count(1) groupNum
+            FROM
+            mx_volunteer_group
+            where 1 = 1
+            <if test="dateType == 'month'">
+                and DATE_FORMAT(establish_date,'%Y-%m') = CONCAT(#{year},'-',#{month})
+            </if>
+            <if test="dateType == 'year'">
+                and DATE_FORMAT(establish_date,'%Y') = #{year}
+            </if>
+            GROUP BY
+            inst_code
+            <if test="dateType == 'month'">
+                ,DATE_FORMAT(establish_date, '%Y-%m')
+            </if>
+            <if test="dateType == 'year'">
+                ,DATE_FORMAT(establish_date, '%Y')
+            </if>
+            ) v
+        </if>
+        <if test="findType == 'info'">
+            SELECT v.*,(
+            SELECT count(1) FROM mx_volunteer WHERE 1=1
+            <if test="dateType == 'month'">
+                and DATE_FORMAT(register_date,'%Y-%m') &lt;= v.tjDate
+            </if>
+            <if test="dateType == 'year'">
+                and DATE_FORMAT(register_date,'%Y') &lt;= v.tjDate
+            </if>
+            and inst_code = instCode
+            ) volunteerTotalNum
+            FROM (
+            SELECT
+            inst_code instCode,
+            max(inst_name) instName,
+            <if test="dateType == 'month'">
+                DATE_FORMAT(register_date, '%Y-%m') tjDate,
+                '3' diTime,
+            </if>
+            <if test="dateType == 'year'">
+                DATE_FORMAT(register_date, '%Y') tjDate,
+                '5' diTime,
+            </if>
+            count(1) volunteerNum
+            FROM
+            mx_volunteer
+            where 1 = 1
+            <if test="dateType == 'month'">
+                and DATE_FORMAT(register_date,'%Y-%m') >= CONCAT(#{year},'-',#{month})
+            </if>
+            <if test="dateType == 'year'">
+                and DATE_FORMAT(register_date,'%Y') >= #{year}
+            </if>
+            GROUP BY
+            inst_code
+            <if test="dateType == 'month'">
+                ,DATE_FORMAT(register_date, '%Y-%m')
+            </if>
+            <if test="dateType == 'year'">
+                ,DATE_FORMAT(register_date, '%Y')
+            </if>
+            ) v
+        </if>
+    </select>
+</mapper>
+
+
+

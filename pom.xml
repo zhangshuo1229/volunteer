@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.8.RELEASE</version>
+    </parent>
+
+    <groupId>com.hbsx</groupId>
+    <artifactId>volunteer-server</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>volunteer-common</module>
+        <module>volunteer-dao</module>
+        <module>volunteer-service</module>
+        <module>volunteer-web</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-boot-maven-plugn.version>1.5.8.RELEASE</spring-boot-maven-plugn.version>
+        <lombok.version>1.18.2</lombok.version>
+        <swagger.version>2.7.0</swagger.version>
+        <druid.version>1.1.10</druid.version>
+        <pagehelper.version>4.1.1</pagehelper.version>
+        <commons-lang3.version>3.6</commons-lang3.version>
+        <commons-logging-api.version>1.1</commons-logging-api.version>
+        <bcprov-jdk16.version>140</bcprov-jdk16.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
+        <gson.version>2.8.2</gson.version>
+        <okhttp.version>3.9.0</okhttp.version>
+        <poi-ooxml.version>3.15</poi-ooxml.version>
+        <httpclient.version>4.3.6</httpclient.version>
+        <httpmime.version>4.3.6</httpmime.version>
+        <org-apache-commons-fileupload.version>1.2.2.LIFERAY-PATCHED-1
+        </org-apache-commons-fileupload.version>
+        <commons-io.version>2.5</commons-io.version>
+        <jsr311-api.version>RELEASE</jsr311-api.version>
+        <log.version>1.8.0-beta2</log.version>
+        <boot.version>1.5.8.RELEASE</boot.version>
+        <fastjson.version>1.2.49</fastjson.version>
+        <spring-core.version>5.0.8.RELEASE</spring-core.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <eureka.version>1.2.5.RELEASE</eureka.version>
+        <hbsx.base.version>1.0-RELEASE</hbsx.base.version>
+        <apollo.version>1.1.0</apollo.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-eureka</artifactId>
+                <version>${eureka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-feign</artifactId>
+                <version>${eureka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-zuul</artifactId>
+                <version>${eureka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Dalston.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging-api</artifactId>
+                <version>${commons-logging-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>bouncycastle</groupId>
+                <artifactId>bcprov-jdk16</artifactId>
+                <version>${bcprov-jdk16.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hbsx</groupId>
+                <artifactId>common-base</artifactId>
+                <version>${hbsx.base.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.ctrip.framework.apollo</groupId>
+                <artifactId>apollo-client</artifactId>
+                <version>${apollo.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <finalName>volunteer-server</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>maven-central</name>
+            <url>http://192.168.3.123:9006/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Nexus Snapshot</name>
+            <layout>Nexus Snapshot</layout>
+            <url>http://192.168.3.123:9006/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <site>
+            <id>nexus</id>
+            <name>Nexus Sites</name>
+            <url>http://192.168.3.123:9006/repository/maven-snapshots/</url>
+        </site>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>maven-public</name>
+            <url>http://192.168.3.123:9006/repository/maven-public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>

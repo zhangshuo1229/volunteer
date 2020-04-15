@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hbsx.mappers.volunteer.VolunteerActivityDao">
+
+    <resultMap id="index" type="com.hbsx.entity.volunteer.HzVolunteerActivity">
+        <id property="id" column="id"/>
+        <result property="activityNum" column="activity_num"/>
+        <result property="participantNum" column="participant_num"/>
+        <result property="diType" column="di_type"/>
+        <result property="diTime" column="di_time"/>
+        <result property="tjDate" column="tj_date"/>
+        <result property="instCode" column="inst_code"/>
+        <result property="instName" column="inst_name"/>
+    </resultMap>
+
+
+    <delete id="deleteVolunteerActivityByTjDate">
+        delete from hz_volunteer_activity where tj_date in
+        <foreach item="item" collection="dateList"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="processVolunteerActivity" resultType="com.hbsx.entity.volunteer.HzVolunteerActivity">
+        SELECT
+        inst_code instCode,
+        max(inst_name) instName,
+        <if test="dateType == 'month'">
+            DATE_FORMAT(act_start_date, '%Y-%m') tjDate,
+            '3' diTime,
+        </if>
+        <if test="dateType == 'year'">
+            DATE_FORMAT(act_start_date, '%Y') tjDate,
+            '5' diTime,
+        </if>
+        count(1) activityNum,
+        SUM(participant_num) participantNum,
+        act_type diType
+        FROM
+        mx_volunteer_activity
+        where 1 = 1
+        <if test="dateType == 'month'">
+            and DATE_FORMAT(act_start_date,'%Y-%m') >= CONCAT(#{year},'-',#{month})
+        </if>
+        <if test="dateType == 'year'">
+            and DATE_FORMAT(act_start_date,'%Y') >= #{year}
+        </if>
+        and mx_volunteer_activity.act_type is not null and mx_volunteer_activity.act_type !=''
+        GROUP BY
+        inst_code,
+        act_type
+        <if test="dateType == 'month'">
+            ,DATE_FORMAT(act_start_date, '%Y-%m')
+        </if>
+        <if test="dateType == 'year'">
+            ,DATE_FORMAT(act_start_date, '%Y')
+        </if>
+    </select>
+</mapper>
+
+
+

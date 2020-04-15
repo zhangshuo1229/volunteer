@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hbsx.mappers.volunteer.VolunteerDao">
+
+    <resultMap id="index" type="com.hbsx.entity.volunteer.HzVolunteer">
+        <id property="id" column="id"/>
+        <result property="volunteerNum" column="volunteer_num"/>
+        <result property="diTime" column="di_time"/>
+        <result property="tjDate" column="tj_date"/>
+        <result property="diAge" column="di_age"/>
+        <result property="diEducation" column="di_education"/>
+        <result property="diOccupation" column="di_occupation"/>
+        <result property="diSex" column="di_sex"/>
+        <result property="instCode" column="inst_code"/>
+        <result property="instName" column="inst_name"/>
+    </resultMap>
+
+
+    <delete id="deleteVolunteerByTjDate">
+        delete from hz_volunteer where tj_date in
+        <foreach item="item" collection="dateList"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+
+    <select id="processVolunteerAge" resultType="com.hbsx.entity.volunteer.HzVolunteer">
+        SELECT
+        inst_code instCode,
+        max(inst_name) instName,
+        <if test="dateType == 'month'">
+            DATE_FORMAT(register_date, '%Y-%m') tjDate,
+            '3' diTime,
+        </if>
+        <if test="dateType == 'year'">
+            DATE_FORMAT(register_date, '%Y') tjDate,
+            '5' diTime,
+        </if>
+        <if test="dateType == 'all'">
+            'all' tjDate,
+            '6' diTime,
+        </if>
+        age diAge,
+        count(1) volunteerNum
+        FROM
+        st_volunteer
+        WHERE
+        1 = 1
+        <if test="dateType == 'month'">
+            and DATE_FORMAT(register_date,'%Y-%m') >= CONCAT(#{year},'-',#{month})
+        </if>
+        <if test="dateType == 'year'">
+            and DATE_FORMAT(register_date,'%Y') >= #{year}
+        </if>
+        GROUP BY
+        inst_code,
+        age
+        <if test="dateType == 'month'">
+            ,DATE_FORMAT(register_date, '%Y-%m')
+        </if>
+        <if test="dateType == 'year'">
+            ,DATE_FORMAT(register_date, '%Y')
+        </if>
+    </select>
+
+    <select id="processVolunteerSex" resultType="com.hbsx.entity.volunteer.HzVolunteer">
+        SELECT
+        inst_code instCode,
+        max(inst_name) instName,
+        <if test="dateType == 'month'">
+            DATE_FORMAT(register_date, '%Y-%m') tjDate,
+            '3' diTime,
+        </if>
+        <if test="dateType == 'year'">
+            DATE_FORMAT(register_date, '%Y') tjDate,
+            '5' diTime,
+        </if>
+        <if test="dateType == 'all'">
+            'all' tjDate,
+            '6' diTime,
+        </if>
+        sex diSex,
+        count(1) volunteerNum
+        FROM
+        mx_volunteer
+        WHERE
+        1 = 1
+        <if test="dateType == 'month'">
+            and DATE_FORMAT(register_date,'%Y-%m') >= CONCAT(#{year},'-',#{month})
+        </if>
+        <if test="dateType == 'year'">
+            and DATE_FORMAT(register_date,'%Y') >= #{year}
+        </if>
+        and mx_volunteer.sex is not null
+        GROUP BY
+        inst_code,
+        sex
+        <if test="dateType == 'month'">
+            ,DATE_FORMAT(register_date, '%Y-%m')
+        </if>
+        <if test="dateType == 'year'">
+            ,DATE_FORMAT(register_date, '%Y')
+        </if>
+    </select>
+
+
+    <select id="processVolunteerOccupation" resultType="com.hbsx.entity.volunteer.HzVolunteer">
+        SELECT
+        inst_code instCode,
+        max(inst_name) instName,
+        <if test="dateType == 'month'">
+            DATE_FORMAT(register_date, '%Y-%m') tjDate,
+            '3' diTime,
+        </if>
+        <if test="dateType == 'year'">
+            DATE_FORMAT(register_date, '%Y') tjDate,
+            '5' diTime,
+        </if>
+        <if test="dateType == 'all'">
+            'all' tjDate,
+            '6' diTime,
+        </if>
+        occupation diOccupation,
+        count(1) volunteerNum
+        FROM
+        mx_volunteer
+        WHERE
+        1 = 1
+        <if test="dateType == 'month'">
+            and DATE_FORMAT(register_date,'%Y-%m') >= CONCAT(#{year},'-',#{month})
+        </if>
+        <if test="dateType == 'year'">
+            and DATE_FORMAT(register_date,'%Y') >= #{year}
+        </if>
+        and mx_volunteer.occupation is not null and mx_volunteer.occupation !=''
+        GROUP BY
+        inst_code,
+        occupation
+        <if test="dateType == 'month'">
+            ,DATE_FORMAT(register_date, '%Y-%m')
+        </if>
+        <if test="dateType == 'year'">
+            ,DATE_FORMAT(register_date, '%Y')
+        </if>
+    </select>
+
+
+    <select id="processVolunteerEducation" resultType="com.hbsx.entity.volunteer.HzVolunteer">
+        SELECT
+        inst_code instCode,
+        max(inst_name) instName,
+        <if test="dateType == 'month'">
+            DATE_FORMAT(register_date, '%Y-%m') tjDate,
+            '3' diTime,
+        </if>
+        <if test="dateType == 'year'">
+            DATE_FORMAT(register_date, '%Y') tjDate,
+            '5' diTime,
+        </if>
+        <if test="dateType == 'all'">
+            'all' tjDate,
+            '6' diTime,
+        </if>
+        education diEducation,
+        count(1) volunteerNum
+        FROM
+        mx_volunteer
+        WHERE
+        1 = 1
+        <if test="dateType == 'month'">
+            and DATE_FORMAT(register_date,'%Y-%m') >= CONCAT(#{year},'-',#{month})
+        </if>
+        <if test="dateType == 'year'">
+            and DATE_FORMAT(register_date,'%Y') >= #{year}
+        </if>
+        and mx_volunteer.education is not null and mx_volunteer.education !=''
+        GROUP BY
+        inst_code,
+        education
+        <if test="dateType == 'month'">
+            ,DATE_FORMAT(register_date, '%Y-%m')
+        </if>
+        <if test="dateType == 'year'">
+            ,DATE_FORMAT(register_date, '%Y')
+        </if>
+    </select>
+
+</mapper>
+
+
+
